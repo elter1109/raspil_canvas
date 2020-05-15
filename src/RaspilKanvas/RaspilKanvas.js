@@ -215,7 +215,7 @@ function HorizontalMetric({ width, newWidth, newHeight, x, y }) {
 
 const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
   const myRef = useRef(null);
-  const [image] = useImage(path);
+  const [image] = useImage(path,);
   // useEffect(() => {
   //   if (image) {
   //     myRef.current.cache();
