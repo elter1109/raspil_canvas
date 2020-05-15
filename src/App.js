@@ -6,6 +6,7 @@ import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 import classes from './App.module.scss';
 
 export default function App() {
+  const [file, setFiles] = useState('');
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
   const [state, setState] = useState({
@@ -80,7 +81,70 @@ export default function App() {
       setLoading(false);
     })();
   }, []);
+  function handleSelectChange(event, type) {
+    setState({
+      ...state,
+      [type]: {
+        ...state[type],
+        value: event.target.value,
+      },
+    });
+  }
+ 
+  let render;
+  if (!loading) {
+    render = (
+      <>
+        <div className={classes.select}>
+          <RaspilSelect
+            data={data.decorArray}
+            label={state.decorPlate.label}
+            helperText='Выберите декор плиты'
+            value={state.decorPlate.value}
+            handleSelectChange={handleSelectChange}
+            name={state.decorPlate.name}
+          />
+          <RaspilSelect
+            data={data.decorKromka2mmArray}
+            label={state.decorKromka2mm.label}
+            helperText='Выберите декор кромки 2мм'
+            value={state.decorKromka2mm.value}
+            handleSelectChange={handleSelectChange}
+            name={state.decorKromka2mm.name}
+          />
+        </div>
+        <div className={classes.Kanvas}>
+          <RaspilKanvas
+            values={state}
+            modelServer={data}
+            //для File(Blob)
+            /*file={file ? URL.createObjectURL(file): null}*/
+            thinkTop
+            thinkLeft
+            thinkBottom
+            thinkRight
+          />
+        </div>
+      </>
+    );
+  } else {
+    render = <h1>Loading...</h1>;
+  }
 
+  return (
+    <StylesProvider injectFirst>
+      <div className={classes.App}>
+        {render}
+        <button disabled onClick={sendKromka}>
+          Отправить на сервер кромку
+        </button>
+        <input
+          type='file'
+          onChange={(event) => setFiles(event.target.files[0])}
+        />
+      </div>
+    </StylesProvider>
+  );
   //PATCH добавили на сервер кромку
   async function sendKromka() {
     const url = 'https://raspil.firebaseio.com/spravka.json';
@@ -117,60 +181,5 @@ export default function App() {
       body: JSON.stringify(data),
     });
     console.log(result);
-  }
-  let render;
-  if (!loading) {
-    render = (
-      <>
-        <div className={classes.select}>
-          <RaspilSelect
-            data={data.decorArray}
-            label={state.decorPlate.label}
-            helperText='Выберите декор плиты'
-            value={state.decorPlate.value}
-            handleSelectChange={handleSelectChange}
-            name={state.decorPlate.name}
-          />
-          <RaspilSelect
-            data={data.decorKromka2mmArray}
-            label={state.decorKromka2mm.label}
-            helperText='Выберите декор кромки 2мм'
-            value={state.decorKromka2mm.value}
-            handleSelectChange={handleSelectChange}
-            name={state.decorKromka2mm.name}
-          />
-        </div>
-        <div className={classes.Kanvas}>
-          <RaspilKanvas
-            values={state}
-            modelServer={data}
-            thinkTop
-            thinkLeft
-            thinkBottom
-            thinkRight
-          />
-        </div>
-      </>
-    );
-  } else {
-    render = <h1>Loading...</h1>;
-  }
-  return (
-    <StylesProvider injectFirst>
-      <div className={classes.App}>
-        {render}
-        {/* <button onClick={sendKromka}>Отправить</button> */}
-      </div>
-    </StylesProvider>
-  );
-
-  function handleSelectChange(event, type) {
-    setState({
-      ...state,
-      [type]: {
-        ...state[type],
-        value: event.target.value,
-      },
-    });
   }
 }

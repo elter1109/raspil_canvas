@@ -215,7 +215,7 @@ function HorizontalMetric({ width, newWidth, newHeight, x, y }) {
 
 const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
   const myRef = useRef(null);
-  const [image] = useImage(path,);
+  const [image] = useImage(path);
   // useEffect(() => {
   //   if (image) {
   //     myRef.current.cache();
@@ -242,6 +242,7 @@ const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
 export default function RaspilKanvas({
   values,
   modelServer,
+  file,
   thickTop,
   thickRight,
   thickLeft,
@@ -286,6 +287,7 @@ export default function RaspilKanvas({
       <Stage width={stageSize} height={stageSize}>
         <Layer>
           <TextureImage
+           /*path={file !== null ? file : null} */
             path={searchDekor(decorPlateValue, decorArray)}
             newWidth={newWidth}
             newHeight={newHeight}
