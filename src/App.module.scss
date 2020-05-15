@@ -1,9 +1,22 @@
 .App {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .Kanvas {
   width: 50%;
+}
+
+.select {
+  width: 50%;
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+
+  &>div {
+    margin-right: 2rem;
+  }
 }

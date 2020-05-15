@@ -30,7 +30,7 @@ const TextureKromka = ({
   thinkRight,
   path,
 }) => {
-  const [image] = useImage(require(`../textures/canvas/${path}`));
+  const [image] = useImage(path);
   const distance = 33;
 
   let top, topText, bottom, bottomText, right, rightText, left, leftText;
@@ -215,12 +215,12 @@ function HorizontalMetric({ width, newWidth, newHeight, x, y }) {
 
 const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
   const myRef = useRef(null);
-  const [image] = useImage(require(`../textures/canvas/${path}`));
-  useEffect(() => {
-    if (image) {
-      myRef.current.cache();
-    }
-  }, [image]);
+  const [image] = useImage(path);
+  // useEffect(() => {
+  //   if (image) {
+  //     myRef.current.cache();
+  //   }
+  // }, [image]);
 
   return (
     <Image
@@ -241,8 +241,7 @@ const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
 
 export default function RaspilKanvas({
   values,
-  textureDetail,
-  textureKromka,
+  modelServer,
   thickTop,
   thickRight,
   thickLeft,
@@ -252,14 +251,20 @@ export default function RaspilKanvas({
   thinkBottom,
   thinkRight,
 }) {
- 
   //DESTRUCTION STATE
   const {
     lengthDetail: { value: width },
     widthDetail: { value: height },
-   
+    decorPlate: { value: decorPlateValue },
+    decorKromka2mm: { value: decorKromka2mmValue },
   } = values;
- 
+  const { decorArray, decorKromka2mmArray } = modelServer;
+
+  //search decor
+  function searchDekor(value, arrayDecor) {
+    const element = arrayDecor.filter((el) => el.value === value);
+    return element[0].src;
+  }
 
   const stageSize = 320;
 
@@ -281,7 +286,7 @@ export default function RaspilKanvas({
       <Stage width={stageSize} height={stageSize}>
         <Layer>
           <TextureImage
-            path={textureDetail}
+            path={searchDekor(decorPlateValue, decorArray)}
             newWidth={newWidth}
             newHeight={newHeight}
             x={x}
@@ -306,7 +311,7 @@ export default function RaspilKanvas({
             y={y}
             newWidth={newWidth}
             newHeight={newHeight}
-            path={textureKromka}
+            path={searchDekor(decorKromka2mmValue, decorKromka2mmArray)}
             thickTop={thickTop}
             thickRight={thickRight}
             thickLeft={thickLeft}
