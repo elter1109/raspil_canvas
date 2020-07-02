@@ -64,6 +64,7 @@ export default function App() {
     },
     validForm: false,
   });
+  console.log(data)
   useEffect(() => {
     (async () => {
       const url = 'https://raspil.firebaseio.com/spravka.json';
@@ -71,11 +72,12 @@ export default function App() {
         method: 'GET',
       });
       const newResult = await response.json();
+
       setData((data) => {
         return {
           ...data,
-          decorArray: newResult.decorArray,
-          decorKromka2mmArray: newResult.decorKromka2mmArray,
+          decorArray: newResult.decors,
+         
         };
       });
       setLoading(false);
@@ -96,7 +98,7 @@ export default function App() {
     render = (
       <>
         <div className={classes.select}>
-          <RaspilSelect
+          {/* <RaspilSelect
             data={data.decorArray}
             label={state.decorPlate.label}
             helperText='Выберите декор плиты'
@@ -111,7 +113,7 @@ export default function App() {
             value={state.decorKromka2mm.value}
             handleSelectChange={handleSelectChange}
             name={state.decorKromka2mm.name}
-          />
+          /> */}
         </div>
         <div className={classes.Kanvas}>
           <RaspilKanvas
