@@ -162,19 +162,32 @@ const TextureKromka = ({
 
 function Metric({ size, newLength, newWidth, x, y, vertical }) {
   console.log({ size }, { newLength }, { newWidth }, { x }, { y });
-  let xGroup, yGroup, arrowPoints, line1Points, line2Points;
+  let xGroup,
+    yGroup,
+    arrowPoints,
+    line1Points,
+    line2Points,
+    xText,
+    yText,
+    rotationText;
   if (vertical) {
     xGroup = x + newLength;
     yGroup = y;
-    arrowPoints=[METRIC_SIZE / 2, 0, METRIC_SIZE / 2, newWidth]
-    line1Points=[0, 0, METRIC_SIZE, 0]
-    line2Points=[0, newWidth, METRIC_SIZE, newWidth]
+    arrowPoints = [METRIC_SIZE / 2, 0, METRIC_SIZE / 2, newWidth];
+    line1Points = [0, 0, METRIC_SIZE, 0];
+    line2Points = [0, newWidth, METRIC_SIZE, newWidth];
+    xText = METRIC_SIZE;
+    yText = newWidth / 2 + 20;
+    rotationText = -90;
   } else {
     xGroup = x;
     yGroup = y + newWidth;
-    arrowPoints=[0, METRIC_SIZE / 2, newLength, METRIC_SIZE / 2]
-    line1Points=[0, 0, 0, METRIC_SIZE]
-    line2Points=[newLength, 0,  newLength, METRIC_SIZE]
+    arrowPoints = [0, METRIC_SIZE / 2, newLength, METRIC_SIZE / 2];
+    line1Points = [0, 0, 0, METRIC_SIZE];
+    line2Points = [newLength, 0, newLength, METRIC_SIZE];
+    xText = newLength / 2 - 20;
+    yText = METRIC_SIZE;
+    rotationText = 0;
   }
 
   return (
@@ -189,46 +202,17 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
         pointerAtBeginning
       />
       <Line points={line1Points} stroke='black' strokeWidth={1} />
-      <Line
-        points={line2Points}
-        stroke='black'
-        strokeWidth={1}
-      />
-
+      <Line points={line2Points} stroke='black' strokeWidth={1} />
       <Text
         text={`${size}мм`}
         padding={2}
-        x={METRIC_SIZE}
-        y={newWidth / 2 + 20}
-        rotation={-90}
+        x={xText}
+        y={yText}
+        rotation={rotationText}
       />
     </Group>
   );
 }
-// function HorizontalMetric({ length, newLength, newWidth, x, y }) {
-//   return (
-//     <Group x={x} y={y + newHeight}>
-//       <Arrow
-//         points={[0, METRIC_SIZE / 2, newWidth, METRIC_SIZE / 2]}
-//         stroke='black'
-//         strokeWidth={1}
-//         pointerLength={5}
-//         pointerWidth={5}
-//         fill='black'
-//         pointerAtBeginning
-//       />
-//       <Line points={[0, 0, 0, METRIC_SIZE]} stroke='black' strokeWidth={1} />
-//       <Line
-//         points={[newWidth, 0, newWidth, METRIC_SIZE]}
-//         stroke='black'
-//         strokeWidth={1}
-//       />
-//       <Label x={newWidth / 2 - 20} y={METRIC_SIZE / 3} shadowColor='black'>
-//         <Text text={`${width} мм`} padding={8} />
-//       </Label>
-//     </Group>
-//   );
-// }
 
 const TextureImage = ({ path, newWidth, newLength, x, y }) => {
   const myRef = useRef(null);
