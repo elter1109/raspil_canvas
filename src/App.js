@@ -22,14 +22,14 @@ const data = {
     sum: 998,
   },
   kromka04mm: {
-    value: 'no_kromka',
+    value: 'reh1615',
     quantity: 0,
     price: 0,
     sum: 0,
   },
   straightKromka: {
     top: '2mm',
-    bottom: '2mm',
+    bottom: '04mm',
     left: '',
     right: '',
   },

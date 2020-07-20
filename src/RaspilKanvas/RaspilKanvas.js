@@ -3,12 +3,10 @@ import Konva from 'konva';
 import { Stage, Layer, Image, Group, Arrow, Line, Text } from 'react-konva';
 import useImage from 'use-image';
 
-import Spinner from '../Spinner/Spinner';
-
 import classes from './RaspilKanvas.module.scss';
 
 const METRIC_SIZE = 20;
-const DISTANCE = 33;
+const DISTANCE = 40;
 
 function Kromka({
   x,
@@ -20,150 +18,51 @@ function Kromka({
   srcKromka2mm,
   srcKromka04mm,
 }) {
-  const { top, bottom, left, right } = straightKromka;
+  const renderComponent = Object.entries(straightKromka).map((el, id) => {
+    const [side, thickness] = el;
+    console.log({ side }, { thickness });
 
-  const renderComponent = Object.entries(straightKromka).map((el) => {
-    console.log(el);
-    let render;
-    if (el !== '') {
-      render = (
-        <Group x={x} y={y - DISTANCE}>
+    if (thickness !== '') {
+      const positionX = {
+        top: 0,
+        bottom: 0,
+      };
+      const posititonY = {
+        top: DISTANCE,
+        bottom: -(newWidth + DISTANCE),
+      };
+      const positionXtext = {
+        top: newLength / 2 - 10,
+        bottom: newLength / 2 - 10,
+      };
+      const posititonYtext = {
+        top: DISTANCE,
+        bottom: -(newWidth + DISTANCE),
+      };
+      return (
+        <Group x={0} y={0} key={id}>
           <TextureImage
-            path={`srcKromka${el}`}
-            newWidth={10}
-            newLength={10}
-            x={x}
-            y={y}
-          />
-          {/* <Image
-            image={image}
-            height={top}
-            x={0}
-            y={0}
-            width={newWidth}
-            shadowBlur={10}
-            shadowOffset={{ x: 10, y: 10 }}
-            shadowOpacity={0.3}
+            path={srcKromka2mm}
+            newWidth={7}
+            newLength={newLength}
+            x={x + positionX[side]}
+            y={y - posititonY[side]}
           />
           <Text
-            text={topText}
+            text={thickness}
             padding={10}
-            x={newWidth / 2 - 10}
-            y={0}
+            x={x + positionXtext[side]}
+            y={y - posititonYtext[side]}
             fontStyle='bold'
-          /> */}
+          />
         </Group>
       );
     } else {
-      render = null;
+      return null;
     }
   });
 
-  // let top, topText, bottom, bottomText, right, rightText, left, leftText;
-  // if (thickTop) {
-  //   top = 7;
-  //   topText = '2.0';
-  // } else if (thinkTop) {
-  //   top = 3;
-  //   topText = '0.4';
-  // } else {
-  //   top = '';
-  //   topText = '0.0';
-  // }
-  // if (thickBottom) {
-  //   bottom = 7;
-  //   bottomText = '2.0';
-  // } else if (thinkBottom) {
-  //   bottom = 3;
-  //   bottomText = '0.4';
-  // } else {
-  //   bottom = '';
-  //   bottomText = '0.0';
-  // }
-  // if (thickRight) {
-  //   right = 7;
-  //   rightText = '2.0';
-  // } else if (thinkRight) {
-  //   right = 3;
-  //   rightText = '0.4';
-  // } else {
-  //   right = '';
-  //   rightText = '0.0';
-  // }
-  // if (thickLeft) {
-  //   left = 7;
-  //   leftText = '2.0';
-  // } else if (thinkLeft) {
-  //   left = 3;
-  //   leftText = '0.4';
-  // } else {
-  //   left = '';
-  //   leftText = '0.0';
-  // }
-  return (
-    <React.Fragment>
-      {renderComponent}
-      {/* <Group x={x} y={y + newHeight + distance}>
-        <Image
-          image={image}
-          height={bottom}
-          x={0}
-          y={0}
-          width={newWidth}
-          shadowBlur={10}
-          shadowOffset={{ x: 10, y: 10 }}
-          shadowOpacity={0.3}
-        />
-        <Text
-          text={bottomText}
-          padding={10}
-          x={newWidth / 2 - 10}
-          y={0}
-          fontStyle='bold'
-        />
-      </Group>
-
-      <Group x={x + newWidth + distance} y={y}>
-        <Image
-          image={image}
-          height={newHeight}
-          x={0}
-          y={0}
-          width={right}
-          shadowBlur={10}
-          shadowOffset={{ x: 10, y: 10 }}
-          shadowOpacity={0.3}
-        />
-        <Text
-          text={rightText}
-          padding={10}
-          x={0}
-          y={newHeight / 2 - 10}
-          fontStyle='bold'
-        />
-      </Group>
-
-      <Group x={x - distance} y={y}>
-        <Image
-          image={image}
-          height={newHeight}
-          x={0}
-          y={0}
-          width={left}
-          shadowBlur={10}
-          shadowOffset={{ x: 10, y: 10 }}
-          shadowOpacity={0.3}
-        />
-        <Text
-          text={leftText}
-          padding={10}
-          x={0}
-          y={newHeight / 2 - 10}
-          fontStyle='bold'
-        />
-      </Group> */}
-    </React.Fragment>
-  );
+  return <React.Fragment>{renderComponent}</React.Fragment>;
 }
 
 function Metric({ size, newLength, newWidth, x, y, vertical }) {
@@ -245,7 +144,11 @@ function TextureImage({ path, newWidth, newLength, x, y }) {
 }
 
 export default function RaspilKanvas({ data, spravka }) {
-  const { length, width, plate: {type: typePlate, value: valuePlate} } = data;
+  const {
+    length,
+    width,
+    plate: { type: typePlate, value: valuePlate },
+  } = data;
 
   function calcProportion(value1, value2) {
     const newMaxValue = Math.max(value1, value2);
@@ -284,7 +187,6 @@ export default function RaspilKanvas({ data, spravka }) {
     data.kromka1mm && data.kromka1mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka1mm.value].src
       : undefined;
-     
 
   return (
     <div className={classes.CanvFigures}>
