@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import reservPhoto from '../reservPhoto/klen.jpg';
 import Konva from 'konva';
 import {
   Stage,
@@ -159,11 +160,21 @@ const TextureKromka = ({
   );
 };
 
-function VerticalMetric({ height, newWidth, newHeight, x, y }) {
+function Metric({ size, newLength, newWidth, x, y, vertical }) {
+  console.log({ size }, { newLength }, { newWidth }, { x }, { y });
+  let xGroup, yGroup;
+  if (vertical) {
+    xGroup = x + newLength;
+    yGroup = y;
+  } else {
+    xGroup = x;
+    yGroup = y - newWidth;
+  }
+
   return (
-    <Group x={x + newWidth} y={y}>
+    <Group x={xGroup} y={yGroup}>
       <Arrow
-        points={[METRIC_SIZE / 2, 0, METRIC_SIZE / 2, newHeight]}
+        points={[METRIC_SIZE / 2, 0, METRIC_SIZE / 2, newWidth]}
         stroke='black'
         strokeWidth={1}
         fill='black'
@@ -173,56 +184,57 @@ function VerticalMetric({ height, newWidth, newHeight, x, y }) {
       />
       <Line points={[0, 0, METRIC_SIZE, 0]} stroke='black' strokeWidth={1} />
       <Line
-        points={[0, newHeight, METRIC_SIZE, newHeight]}
+        points={[0, newWidth, METRIC_SIZE, newWidth]}
         stroke='black'
         strokeWidth={1}
       />
 
       <Text
-        text={`${height}мм`}
+        text={`${size}мм`}
         padding={2}
         x={METRIC_SIZE}
-        y={newHeight / 2 + 20}
+        y={newWidth / 2 + 20}
         rotation={-90}
       />
     </Group>
   );
 }
-function HorizontalMetric({ width, newWidth, newHeight, x, y }) {
-  return (
-    <Group x={x} y={y + newHeight}>
-      <Arrow
-        points={[0, METRIC_SIZE / 2, newWidth, METRIC_SIZE / 2]}
-        stroke='black'
-        strokeWidth={1}
-        pointerLength={5}
-        pointerWidth={5}
-        fill='black'
-        pointerAtBeginning
-      />
-      <Line points={[0, 0, 0, METRIC_SIZE]} stroke='black' strokeWidth={1} />
-      <Line
-        points={[newWidth, 0, newWidth, METRIC_SIZE]}
-        stroke='black'
-        strokeWidth={1}
-      />
-      <Label x={newWidth / 2 - 20} y={METRIC_SIZE / 3} shadowColor='black'>
-        <Text text={`${width} мм`} padding={8} />
-      </Label>
-    </Group>
-  );
-}
+// function HorizontalMetric({ length, newLength, newWidth, x, y }) {
+//   return (
+//     <Group x={x} y={y + newHeight}>
+//       <Arrow
+//         points={[0, METRIC_SIZE / 2, newWidth, METRIC_SIZE / 2]}
+//         stroke='black'
+//         strokeWidth={1}
+//         pointerLength={5}
+//         pointerWidth={5}
+//         fill='black'
+//         pointerAtBeginning
+//       />
+//       <Line points={[0, 0, 0, METRIC_SIZE]} stroke='black' strokeWidth={1} />
+//       <Line
+//         points={[newWidth, 0, newWidth, METRIC_SIZE]}
+//         stroke='black'
+//         strokeWidth={1}
+//       />
+//       <Label x={newWidth / 2 - 20} y={METRIC_SIZE / 3} shadowColor='black'>
+//         <Text text={`${width} мм`} padding={8} />
+//       </Label>
+//     </Group>
+//   );
+// }
 
 const TextureImage = ({ path, newWidth, newLength, x, y }) => {
- 
   const myRef = useRef(null);
   const [image] = useImage(path);
-  console.log({image})
-  // useEffect(() => {
-  //   if (image) {
-  //     myRef.current.cache();
-  //   }
-  // }, [image]);
+  // const reserv = <img src={reservPhoto} alt='reserv'/>
+
+  console.log({ image });
+  useEffect(() => {
+    if (image) {
+      myRef.current.cache();
+    }
+  }, [image]);
 
   return (
     <Image
@@ -275,7 +287,7 @@ export default function RaspilKanvas({ values, spravka }) {
   }
   const x = Math.round((STAGE_SIZE - newLength) / 2);
   const y = Math.round((STAGE_SIZE - newWidth) / 2);
- 
+
   return (
     <div className={classes.CanvFigures}>
       <Stage height={STAGE_SIZE} width={STAGE_SIZE}>
@@ -287,13 +299,15 @@ export default function RaspilKanvas({ values, spravka }) {
             x={x}
             y={y}
           />
-          {/* <VerticalMetric
-            height={height}
+          <Metric
+            size={width}
+            newLength={newLength}
             newWidth={newWidth}
-            newHeight={newHeight}
             x={x}
             y={y}
+            vertical
           />
+          {/*
           <HorizontalMetric
             width={width}
             newWidth={newWidth}
