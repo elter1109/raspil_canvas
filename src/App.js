@@ -220,7 +220,7 @@ export default function App() {
     <>
       <div className={classes.Kanvas}>
         <RaspilKanvas
-          values={data}
+          data={data}
           spravka={spravka}
         />
       </div>
