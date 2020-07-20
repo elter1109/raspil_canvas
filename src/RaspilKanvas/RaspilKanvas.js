@@ -7,6 +7,7 @@ import classes from './RaspilKanvas.module.scss';
 
 const METRIC_SIZE = 20;
 const DISTANCE = 40;
+const STAGE_SIZE = 320;
 
 function Kromka({
   x,
@@ -62,7 +63,7 @@ function Kromka({
     }
   });
 
-  return <React.Fragment>{renderComponent}</React.Fragment>;
+  return <>{renderComponent}</>;
 }
 
 function Metric({ size, newLength, newWidth, x, y, vertical }) {
@@ -158,7 +159,7 @@ export default function RaspilKanvas({ data, spravka }) {
   }
 
   let newLength, newWidth;
-  const STAGE_SIZE = 320;
+ 
   const proportion = calcProportion(length, width);
   console.log({ proportion });
 

@@ -5,12 +5,12 @@ import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 import classes from './App.module.scss';
 
 const data = {
-  length: 2000,
-  width: 896,
+  length: 2800,
+  width: 2000,
   quantity: 6,
   plate: {
     type: 'mm25',
-    value: 'h1348',
+    value: 'h3304',
     quantity: 3.12,
     price: 1100,
     sum: 3432,
