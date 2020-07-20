@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import Konva from 'konva';
+// import Konva from 'konva';
 import { Stage, Layer, Image, Group, Arrow, Line, Text } from 'react-konva';
 import useImage from 'use-image';
 
