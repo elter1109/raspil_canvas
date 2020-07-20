@@ -30,7 +30,7 @@ const data = {
   straightKromka: {
     top: '2mm',
     bottom: '04mm',
-    left: '',
+    left: '2mm',
     right: '',
   },
   packing: false,

@@ -27,25 +27,29 @@ function Kromka({
       const positionX = {
         top: 0,
         bottom: 0,
+        left: -DISTANCE
       };
       const posititonY = {
         top: DISTANCE,
         bottom: -(newWidth + DISTANCE),
+        left: 0
       };
       const positionXtext = {
         top: newLength / 2 - 10,
-        bottom: newLength / 2 - 10,
+        bottom: -(newLength / 2 - 10),
+        left:-DISTANCE
       };
       const posititonYtext = {
-        top: DISTANCE,
+        top: -DISTANCE,
         bottom: -(newWidth + DISTANCE),
+        left:  -(newLength / 2 - 10)
       };
       return (
-        <Group x={0} y={0} key={id}>
+        <Group key={id}>
           <TextureImage
             path={srcKromka2mm}
-            newWidth={7}
-            newLength={newLength}
+            newWidth={side  === 'top' || side === 'bottom' ? 7 : newWidth}
+            newLength={side  === 'top' || side === 'bottom' ? newLength : 7}
             x={x + positionX[side]}
             y={y - posititonY[side]}
           />
@@ -53,7 +57,7 @@ function Kromka({
             text={thickness}
             padding={10}
             x={x + positionXtext[side]}
-            y={y - posititonYtext[side]}
+            y={y + posititonYtext[side]}
             fontStyle='bold'
           />
         </Group>
@@ -134,7 +138,7 @@ function TextureImage({ path, newWidth, newLength, x, y }) {
       height={newWidth}
       x={x}
       y={y}
-      filters={[Konva.Filters.Contrast]}
+      /* filters={[Konva.Filters.Contrast]} */
       contrast={18}
       ref={myRef}
       shadowBlur={20}
