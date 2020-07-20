@@ -162,19 +162,25 @@ const TextureKromka = ({
 
 function Metric({ size, newLength, newWidth, x, y, vertical }) {
   console.log({ size }, { newLength }, { newWidth }, { x }, { y });
-  let xGroup, yGroup;
+  let xGroup, yGroup, arrowPoints, line1Points, line2Points;
   if (vertical) {
     xGroup = x + newLength;
     yGroup = y;
+    arrowPoints=[METRIC_SIZE / 2, 0, METRIC_SIZE / 2, newWidth]
+    line1Points=[0, 0, METRIC_SIZE, 0]
+    line2Points=[0, newWidth, METRIC_SIZE, newWidth]
   } else {
     xGroup = x;
-    yGroup = y - newWidth;
+    yGroup = y + newWidth;
+    arrowPoints=[0, METRIC_SIZE / 2, newLength, METRIC_SIZE / 2]
+    line1Points=[0, 0, 0, METRIC_SIZE]
+    line2Points=[newLength, 0,  newLength, METRIC_SIZE]
   }
 
   return (
     <Group x={xGroup} y={yGroup}>
       <Arrow
-        points={[METRIC_SIZE / 2, 0, METRIC_SIZE / 2, newWidth]}
+        points={arrowPoints}
         stroke='black'
         strokeWidth={1}
         fill='black'
@@ -182,9 +188,9 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
         pointerWidth={5}
         pointerAtBeginning
       />
-      <Line points={[0, 0, METRIC_SIZE, 0]} stroke='black' strokeWidth={1} />
+      <Line points={line1Points} stroke='black' strokeWidth={1} />
       <Line
-        points={[0, newWidth, METRIC_SIZE, newWidth]}
+        points={line2Points}
         stroke='black'
         strokeWidth={1}
       />
@@ -307,14 +313,14 @@ export default function RaspilKanvas({ values, spravka }) {
             y={y}
             vertical
           />
-          {/*
-          <HorizontalMetric
-            width={width}
+          <Metric
+            size={length}
+            newLength={newLength}
             newWidth={newWidth}
-            newHeight={newHeight}
             x={x}
             y={y}
           />
+          {/*
           <TextureKromka
             x={x}
             y={y}
