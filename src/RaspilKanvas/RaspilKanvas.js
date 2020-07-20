@@ -7,7 +7,7 @@ import classes from './RaspilKanvas.module.scss';
 
 const METRIC_SIZE = 20;
 const DISTANCE = 40;
-const STAGE_SIZE = 320;
+const STAGE_SIZE = 336;
 
 function Kromka({
   x,
@@ -21,43 +21,60 @@ function Kromka({
 }) {
   const renderComponent = Object.entries(straightKromka).map((el, id) => {
     const [side, thickness] = el;
-    console.log({ side }, { thickness });
-
+  
     if (thickness !== '') {
       const positionX = {
         top: 0,
         bottom: 0,
-        left: -DISTANCE
+        left: -DISTANCE,
+        right: newLength + DISTANCE
       };
       const posititonY = {
-        top: DISTANCE,
-        bottom: -(newWidth + DISTANCE),
-        left: 0
+        top: -DISTANCE,
+        bottom: newWidth + DISTANCE,
+        left: 0,
+        right: 0
       };
       const positionXtext = {
         top: newLength / 2 - 10,
-        bottom: -(newLength / 2 - 10),
-        left:-DISTANCE
+        bottom: newLength / 2 - 10,
+        left: -DISTANCE,
+        right: newLength + DISTANCE
       };
       const posititonYtext = {
         top: -DISTANCE,
-        bottom: -(newWidth + DISTANCE),
-        left:  -(newLength / 2 - 10)
+        bottom: newWidth + DISTANCE,
+        left: newWidth / 2 + 20,
+        right: newWidth/ 2 + 20
       };
+      const rotationText= {
+        top: 0,
+        bottom: 0,
+        left: -90,
+        right: -90
+      }
+      
       return (
         <Group key={id}>
           <TextureImage
-            path={srcKromka2mm}
-            newWidth={side  === 'top' || side === 'bottom' ? 7 : newWidth}
-            newLength={side  === 'top' || side === 'bottom' ? newLength : 7}
+            path={
+              thickness === '2mm'
+                ? srcKromka2mm
+                : thickness === '04mm'
+                ? srcKromka04mm
+                : srcKromka1mm
+            }
+            newWidth={side === 'top' || side === 'bottom' ? 7 : newWidth}
+            newLength={side === 'top' || side === 'bottom' ? newLength : 7}
             x={x + positionX[side]}
-            y={y - posititonY[side]}
+            y={y + posititonY[side]}
           />
           <Text
             text={thickness}
             padding={10}
             x={x + positionXtext[side]}
             y={y + posititonYtext[side]}
+            rotation={rotationText[side]}
             fontStyle='bold'
           />
         </Group>
@@ -141,9 +158,9 @@ function TextureImage({ path, newWidth, newLength, x, y }) {
       /* filters={[Konva.Filters.Contrast]} */
       contrast={18}
       ref={myRef}
-      shadowBlur={20}
+      shadowBlur={12}
       shadowOffset={{ x: 10, y: 10 }}
-      shadowOpacity={0.5}
+      shadowOpacity={0.3}
     />
   );
 }
@@ -163,19 +180,18 @@ export default function RaspilKanvas({ data, spravka }) {
   }
 
   let newLength, newWidth;
- 
+
   const proportion = calcProportion(length, width);
-  console.log({ proportion });
 
   if (length < width) {
-    newWidth = STAGE_SIZE - 120;
+    newWidth = STAGE_SIZE - 130;
     newLength = ~~(newWidth / proportion);
   } else if (length > width) {
-    newLength = STAGE_SIZE - 120;
+    newLength = STAGE_SIZE - 130;
     newWidth = ~~(newLength / proportion);
   } else {
-    newLength = STAGE_SIZE - 120;
-    newWidth = STAGE_SIZE - 120;
+    newLength = STAGE_SIZE - 130;
+    newWidth = STAGE_SIZE - 130;
   }
   const x = Math.round((STAGE_SIZE - newLength) / 2);
   const y = Math.round((STAGE_SIZE - newWidth) / 2);

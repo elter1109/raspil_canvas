@@ -6,7 +6,7 @@ import classes from './App.module.scss';
 
 const data = {
   length: 2800,
-  width: 2000,
+  width: 2800,
   quantity: 6,
   plate: {
     type: 'mm25',
@@ -31,7 +31,7 @@ const data = {
     top: '2mm',
     bottom: '04mm',
     left: '2mm',
-    right: '',
+    right: '04mm',
   },
   packing: false,
   totalSum: 4430,
