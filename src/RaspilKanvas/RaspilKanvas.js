@@ -213,9 +213,11 @@ function HorizontalMetric({ width, newWidth, newHeight, x, y }) {
   );
 }
 
-const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
+const TextureImage = ({ path, newWidth, newLength, x, y }) => {
+ 
   const myRef = useRef(null);
   const [image] = useImage(path);
+  console.log({image})
   // useEffect(() => {
   //   if (image) {
   //     myRef.current.cache();
@@ -225,8 +227,8 @@ const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
   return (
     <Image
       image={image}
-      width={newWidth}
-      height={newHeight}
+      width={newLength}
+      height={newWidth}
       x={x}
       y={y}
       filters={[Konva.Filters.Contrast]}
@@ -244,21 +246,22 @@ export default function RaspilKanvas({ values, spravka }) {
     length,
     width,
     plate: { value: decorPlate },
-    kromka2mm: { value: decorKromka2mm },
-    kromka04mm: { value: decorKromka04mm },
-    kromka1mm: { value: decorKromka1mm },
+    // kromka2mm: { value: decorKromka2mm },
+    // kromka04mm: { value: decorKromka04mm },
+    // kromka1mm: { value: decorKromka1mm },
   } = values;
 
   function calcProportion(value1, value2) {
     const newMaxValue = Math.max(value1, value2);
     const newMinValue = Math.min(value1, value2);
-    const proportion = (newMaxValue / newMinValue).toFixed(1);
+    const proportion = +(newMaxValue / newMinValue).toFixed(1);
     return proportion;
   }
-  
+
   let newLength, newWidth;
   const STAGE_SIZE = 320;
   const proportion = calcProportion(length, width);
+  console.log({ proportion });
 
   if (length < width) {
     newWidth = STAGE_SIZE - 120;
@@ -270,14 +273,14 @@ export default function RaspilKanvas({ values, spravka }) {
     newLength = STAGE_SIZE - 120;
     newWidth = STAGE_SIZE - 120;
   }
-  // const x = Math.round((STAGE_SIZE - newWidth) / 2);
-  // const y = Math.round((STAGE_SIZE - newHeight) / 2);
+  const x = Math.round((STAGE_SIZE - newLength) / 2);
+  const y = Math.round((STAGE_SIZE - newWidth) / 2);
+ 
   return (
     <div className={classes.CanvFigures}>
-      <Stage length={STAGE_SIZE} width={STAGE_SIZE}>
+      <Stage height={STAGE_SIZE} width={STAGE_SIZE}>
         <Layer>
           <TextureImage
-            /*path={file !== null ? file : null} */
             path={spravka.decors[decorPlate].src}
             newLength={newLength}
             newWidth={newWidth}

@@ -5,8 +5,8 @@ import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 import classes from './App.module.scss';
 
 const data = {
-  length: 2600,
-  width: 200,
+  length: 2696,
+  width: 569,
   quantity: 6,
   plate: {
     type: 'mm25',
