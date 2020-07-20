@@ -1,187 +1,236 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StylesProvider } from '@material-ui/core/styles';
-import RaspilSelect from './RaspilSelect/RaspilSelect';
 import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 
 import classes from './App.module.scss';
 
-export default function App() {
-  const [file, setFiles] = useState('');
-  const [data, setData] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [state, setState] = useState({
-    lengthDetail: {
-      value: 1500,
-      name: 'lengthDetail',
-      label: 'Длина, мм',
-      valid: true,
-      rules: {
-        isNumber: true,
-        max: 2800,
-      },
-      touched: false,
+const data = {
+  length: 2600,
+  width: 200,
+  quantity: 6,
+  plate: {
+    type: 'mm25',
+    value: 'h1348',
+    quantity: 3.12,
+    price: 1100,
+    sum: 3432,
+  },
+  kromka2mm: {
+    value: 'reh1348',
+    quantity: 31.2,
+    price: 32,
+    sum: 998,
+  },
+  kromka04mm: {
+    value: 'no_kromka',
+    quantity: 0,
+    price: 0,
+    sum: 0,
+  },
+  straightKromka: {
+    top: '2mm',
+    bottom: '2mm',
+    left: '',
+    right: '',
+  },
+  packing: false,
+  totalSum: 4430,
+};
+// spravka redux
+const spravka = {
+  decors: {
+    h1348: {
+      id: 'h1348',
+      label: 'Кремона шампань H1348 (Egger)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
     },
-    widthDetail: {
-      value: 1500,
-      name: 'widthDetail',
-      label: 'Ширина, мм',
-      valid: true,
-      rules: {
-        isNumber: true,
-        max: 2000,
-      },
-      touched: false,
+    h3304: {
+      id: 'h3304',
+      label: 'Дуб шато H3304 (Egger)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fshato.jpg?alt=media&token=17450706-c90a-4315-b4db-41b2ae5549ea',
     },
-    decorPlate: {
-      label: 'Декор плиты',
-      value: 'H1555_egger',
-      valid: true,
-      touched: false,
-      name: 'decorPlate',
-      rules: {
-        isSelect: true,
-      },
+    h1555: {
+      id: 'h1555',
+      label: 'Венге H1555 (Egger)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvenge.jpg?alt=media&token=3aa251b4-a072-4c5f-bccf-e2a0c0a9a62d',
     },
-    decorKromka2mm: {
-      label: 'Декор кромки 2мм',
-      value: 'klen_rehau',
-      valid: true,
-      touched: false,
-      name: 'decorKromka2mm',
-      rules: {
-        isSelect: true,
-      },
+    h1615: {
+      id: 'h1615',
+      label: 'Вишня H1615 (Egger)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvishnya.jpg?alt=media&token=e2e5b313-f133-4b2b-b84d-3a54e09e2eb1',
     },
-    decorKromka04mm: {
-      label: 'Декор кромки 0.4мм',
-      value: 'dub_rehau',
-      valid: true,
-      touched: false,
-      name: 'decorKromka04mm',
-      rules: {
-        isSelect: true,
-      },
+    reh1348: {
+      id: 'reh1348',
+      label: 'Rehau дуб средний (Rehau)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
     },
-    validForm: false,
-  });
-  console.log(data)
-  useEffect(() => {
-    (async () => {
-      const url = 'https://raspil.firebaseio.com/spravka.json';
-      const response = await fetch(url, {
-        method: 'GET',
-      });
-      const newResult = await response.json();
+    reh3304: {
+      id: 'reh3304',
+      label: 'Rehau дуб шато (Rehau)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fshato.jpg?alt=media&token=17450706-c90a-4315-b4db-41b2ae5549ea',
+    },
+    reh1555: {
+      id: 'reh1555',
+      label: 'Rehau венге (Rehau)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvenge.jpg?alt=media&token=3aa251b4-a072-4c5f-bccf-e2a0c0a9a62d',
+    },
+    reh1615: {
+      id: 'reh1615',
+      label: 'Rehau вишня (Rehau)',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvishnya.jpg?alt=media&token=e2e5b313-f133-4b2b-b84d-3a54e09e2eb1',
+    },
+    reh097: {
+      id: 'reh097',
+      label: '097 кремовый',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
+    },
+    reh605: {
+      id: 'reh605',
+      label: '605 кремовый',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
+    },
+    hg606: {
+      id: 'hg606',
+      label: '606HG cветло-бежевый',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
+    },
+    klen: {
+      id: 'klen',
+      label: 'Оргалит Клен',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
+    },
+    venge: {
+      id: 'venge',
+      label: 'Оргалит Венге',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvenge.jpg?alt=media&token=3aa251b4-a072-4c5f-bccf-e2a0c0a9a62d',
+    },
+    hg605: {
+      id: 'hg605',
+      label: '605HG кремовый',
+      src:
+        'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
+    },
+    mm16: {
+      label: 'ДСП 16мм',
+    },
+    mm25: {
+      label: 'ДСП 25мм',
+    },
+    mm0810: {
+      label: 'ДСП 08-10мм',
+    },
+    orgalit: {
+      label: 'ОРГАЛИТ',
+    },
+    mdf: {
+      label: 'МДФ',
+    },
+    kromka2mm: {
+      label: 'Кромка 2мм',
+    },
+    kromka04mm: {
+      label: 'Кромка 0,4mm',
+    },
+    kromka1mm: {
+      label: 'Кромка 1мм',
+    },
+  },
+  types: {
+    mm16: [
+      { decor: 'h1348', price: 550, availableForOrder: true },
+      { decor: 'h3304', price: 620, availableForOrder: false },
+      { decor: 'h1555', price: 670, availableForOrder: true },
+      { decor: 'h1615', price: 690, availableForOrder: false },
+    ],
+    mm25: [
+      { decor: 'h1348', price: 1100, availableForOrder: true },
+      { decor: 'h1555', price: 950, availableForOrder: true },
+      { decor: 'h1615', price: 1000, availableForOrder: false },
+    ],
+    mm0810: [
+      { decor: 'h1348', price: 520, availableForOrder: true },
+      { decor: 'h1555', price: 580, availableForOrder: true },
+    ],
+    orgalit: [
+      {
+        decor: 'klen',
+        price: 230,
+        availableForOrder: true,
+      },
+      {
+        decor: 'venge',
+        price: 200,
+        availableForOrder: true,
+      },
+    ],
+    mdf: [
+      { decor: 'hg605', price: 1800, availableForOrder: true },
+      { decor: 'hg606', price: 1900, availableForOrder: true },
+    ],
 
-      setData((data) => {
-        return {
-          ...data,
-          decorArray: newResult.decors,
-         
-        };
-      });
-      setLoading(false);
-    })();
-  }, []);
-  function handleSelectChange(event, type) {
-    setState({
-      ...state,
-      [type]: {
-        ...state[type],
-        value: event.target.value,
-      },
-    });
-  }
- 
-  let render;
-  if (!loading) {
-    render = (
-      <>
-        <div className={classes.select}>
-          {/* <RaspilSelect
-            data={data.decorArray}
-            label={state.decorPlate.label}
-            helperText='Выберите декор плиты'
-            value={state.decorPlate.value}
-            handleSelectChange={handleSelectChange}
-            name={state.decorPlate.name}
-          />
-          <RaspilSelect
-            data={data.decorKromka2mmArray}
-            label={state.decorKromka2mm.label}
-            helperText='Выберите декор кромки 2мм'
-            value={state.decorKromka2mm.value}
-            handleSelectChange={handleSelectChange}
-            name={state.decorKromka2mm.name}
-          /> */}
-        </div>
-        <div className={classes.Kanvas}>
-          <RaspilKanvas
-            values={state}
-            modelServer={data}
-            //для File(Blob)
-            /*file={file ? URL.createObjectURL(file): null}*/
-            thinkTop
-            thinkLeft
-            thinkBottom
-            thinkRight
-          />
-        </div>
-      </>
-    );
-  } else {
-    render = <h1>Loading...</h1>;
-  }
+    kromka2mm_mm25: [
+      { decor: 'reh1348', price: 45 },
+      { decor: 'reh3304', price: 48 },
+      { decor: 'reh097', price: 49 },
+      { decor: 'no_kromka', price: 0 },
+    ],
+    kromka04mm_mm25: [
+      { decor: 'reh1348', price: 25 },
+      { decor: 'reh1615', price: 22 },
+      { decor: 'reh097', price: 24 },
+      { decor: 'no_kromka', price: 0 },
+    ],
+    kromka2mm_mm16: [
+      { decor: 'reh1348', price: 22 },
+      { decor: 'reh3304', price: 20 },
+      { decor: 'reh1555', price: 19 },
+      { decor: 'reh1615', price: 18 },
+      { decor: 'reh097', price: 21 },
+      { decor: 'no_kromka', price: 0 },
+    ],
+    kromka04mm_mm16: [
+      { decor: 'reh1348', price: 15 },
+      { decor: 'reh3304', price: 16 },
+      { decor: 'reh1555', price: 18 },
+      { decor: 'reh1615', price: 19 },
+      { decor: 'reh097', price: 17 },
+      { decor: 'no_kromka', price: 0 },
+    ],
+    kromka1mm_mdf: [
+      { decor: 'reh605', price: 30 },
+      { decor: 'no_kromka', price: 0 },
+    ],
+  },
+};
+export default function App() {
+  const render = (
+    <>
+      <div className={classes.Kanvas}>
+        <RaspilKanvas
+          values={data}
+          spravka={spravka}
+        />
+      </div>
+    </>
+  );
 
   return (
     <StylesProvider injectFirst>
-      <div className={classes.App}>
-        {render}
-        <button disabled onClick={sendKromka}>
-          Отправить на сервер кромку
-        </button>
-        <input
-          type='file'
-          onChange={(event) => setFiles(event.target.files[0])}
-        />
-      </div>
+      <div className={classes.App}>{render}</div>
     </StylesProvider>
   );
-  //PATCH добавили на сервер кромку
-  async function sendKromka() {
-    const url = 'https://raspil.firebaseio.com/spravka.json';
-    const data = {
-      decorKromka2mmArray: [
-        {
-          label: 'Rehau klen',
-          value: 'klen_rehau',
-          src:
-            'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fshato.jpg?alt=media&token=17450706-c90a-4315-b4db-41b2ae5549ea',
-        },
-        {
-          label: 'Rehau вишня',
-          value: 'vishnya_rehau',
-          src:
-            'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvishnya.jpg?alt=media&token=e2e5b313-f133-4b2b-b84d-3a54e09e2eb1',
-        },
-        {
-          label: 'Rehau_шато',
-          value: 'shato_rehau',
-          src:
-            'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fklen.jpg?alt=media&token=2f8a3da7-f17e-43f5-bcc3-bdc371537edb',
-        },
-        {
-          label: 'Rehau венге',
-          value: 'venge_rehau',
-          src:
-            'https://firebasestorage.googleapis.com/v0/b/raspil.appspot.com/o/decorPlate%2Fvenge.jpg?alt=media&token=3aa251b4-a072-4c5f-bccf-e2a0c0a9a62d',
-        },
-      ],
-    };
-    const result = await fetch(url, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-    });
-    console.log(result);
-  }
+  
 }

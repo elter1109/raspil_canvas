@@ -239,62 +239,52 @@ const TextureImage = ({ path, newWidth, newHeight, x, y }) => {
   );
 };
 
-export default function RaspilKanvas({
-  values,
-  modelServer,
-  file,
-  thickTop,
-  thickRight,
-  thickLeft,
-  thickBottom,
-  thinkTop,
-  thinkLeft,
-  thinkBottom,
-  thinkRight,
-}) {
-  //DESTRUCTION STATE
+export default function RaspilKanvas({ values, spravka }) {
   const {
-    lengthDetail: { value: width },
-    widthDetail: { value: height },
-    decorPlate: { value: decorPlateValue },
-    decorKromka2mm: { value: decorKromka2mmValue },
+    length,
+    width,
+    plate: { value: decorPlate },
+    kromka2mm: { value: decorKromka2mm },
+    kromka04mm: { value: decorKromka04mm },
+    kromka1mm: { value: decorKromka1mm },
   } = values;
-  const { decorArray, decorKromka2mmArray } = modelServer;
 
-  //search decor
-  function searchDekor(value, arrayDecor) {
-    const element = arrayDecor.filter((el) => el.value === value);
-    return element[0].src;
+  function calcProportion(value1, value2) {
+    const newMaxValue = Math.max(value1, value2);
+    const newMinValue = Math.min(value1, value2);
+    const proportion = (newMaxValue / newMinValue).toFixed(1);
+    return proportion;
   }
+  
+  let newLength, newWidth;
+  const STAGE_SIZE = 320;
+  const proportion = calcProportion(length, width);
 
-  const stageSize = 320;
-
-  let newHeight, newWidth;
-  if (width < height) {
-    newHeight = stageSize - 120;
-    newWidth = Math.round((newHeight * width) / height);
-  } else if (width > height) {
-    newWidth = stageSize - 120;
-    newHeight = Math.round((newWidth * height) / width);
+  if (length < width) {
+    newWidth = STAGE_SIZE - 120;
+    newLength = ~~(newWidth / proportion);
+  } else if (length > width) {
+    newLength = STAGE_SIZE - 120;
+    newWidth = ~~(newLength / proportion);
   } else {
-    newWidth = stageSize - 120;
-    newHeight = stageSize - 120;
+    newLength = STAGE_SIZE - 120;
+    newWidth = STAGE_SIZE - 120;
   }
-  const x = Math.round((stageSize - newWidth) / 2);
-  const y = Math.round((stageSize - newHeight) / 2);
+  // const x = Math.round((STAGE_SIZE - newWidth) / 2);
+  // const y = Math.round((STAGE_SIZE - newHeight) / 2);
   return (
     <div className={classes.CanvFigures}>
-      <Stage width={stageSize} height={stageSize}>
+      <Stage length={STAGE_SIZE} width={STAGE_SIZE}>
         <Layer>
           <TextureImage
-           /*path={file !== null ? file : null} */
-            path={searchDekor(decorPlateValue, decorArray)}
+            /*path={file !== null ? file : null} */
+            path={spravka.decors[decorPlate].src}
+            newLength={newLength}
             newWidth={newWidth}
-            newHeight={newHeight}
             x={x}
             y={y}
           />
-          <VerticalMetric
+          {/* <VerticalMetric
             height={height}
             newWidth={newWidth}
             newHeight={newHeight}
@@ -322,7 +312,7 @@ export default function RaspilKanvas({
             thinkLeft={thinkLeft}
             thinkBottom={thinkBottom}
             thinkRight={thinkRight}
-          />
+          /> */}
         </Layer>
       </Stage>
     </div>
