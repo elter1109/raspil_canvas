@@ -54,52 +54,32 @@ function Kromka({
         left: -90,
         right: -90,
       };
-
-      const definedSize = {
-        newWidth: {
-          top: {
-            '2mm': 7,
-            '04mm': 3,
-            '1mm': 5,
-          },
-          bottom: {
-            '2mm': 7,
-            '04mm': 3,
-            '1mm': 5,
-          },
-          left: {
-            '2mm': newWidth,
-            '04mm': newWidth,
-            '1mm': newWidth,
-          },
-          right: {
-            '2mm': newWidth,
-            '04mm': newWidth,
-            '1mm': newWidth,
-          },
-        },
-        newLength: {
-          top: {
-            '2mm': newLength,
-            '04mm': newLength,
-            '1mm': newLength,
-          },
-          bottom: {
-            '2mm': newLength,
-            '04mm': newLength,
-            '1mm': newLength,
-          },
-          left: {
-            '2mm': 7,
-            '04mm': 3,
-            '1mm': 5,
-          },
-          right: {
-            '2mm': 7,
-            '04mm': 3,
-            '1mm': 5,
-          },
-        },
+      const defineSize = (size, side, thickness, flag) => {
+        let newValue;
+        const newSize = {
+          '2mm': 7,
+          '04mm': 3,
+          '1mm': 5,
+        };
+        if (flag === 'newWidth' && (side === 'top' || side === 'bottom')) {
+          newValue = newSize[thickness];
+        } else if (
+          flag === 'newWidth' &&
+          (side === 'left' || side === 'right')
+        ) {
+          newValue = size;
+        } else if (
+          flag === 'newLength' &&
+          (side === 'top' || side === 'bottom')
+        ) {
+          newValue = size;
+        } else if (
+          flag === 'newLength' &&
+          (side === 'left' || side === 'right')
+        ) {
+          newValue = newSize[thickness];
+        }
+        return newValue;
       };
 
       return (
@@ -112,8 +92,8 @@ function Kromka({
                 ? srcKromka04mm
                 : srcKromka1mm
             }
-            newWidth={definedSize.newWidth[side][thickness]}
-            newLength={definedSize.newLength[side][thickness]}
+            newWidth={defineSize(newWidth, side, thickness, 'newWidth')}
+            newLength={defineSize(newLength, side, thickness, 'newLength')}
             x={x + positionX[side]}
             y={y + posititonY[side]}
           />
@@ -250,13 +230,15 @@ export default function RaspilKanvas({ data, spravka }) {
       ? spravka.decors[data.kromka2mm.value].src
       : undefined;
   const srcKromka04mm =
-    data.kromka04mm && data.kromka04mm.value !== 'no_kromka'
+    !!data.kromka04mm && data.kromka04mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka04mm.value].src
-      : undefined;
+      : undefined; 
+       
   const srcKromka1mm =
     data.kromka1mm && data.kromka1mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka1mm.value].src
       : undefined;
+   
 
   return (
     <div className={classes.CanvFigures}>

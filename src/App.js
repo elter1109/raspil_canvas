@@ -5,37 +5,66 @@ import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 import classes from './App.module.scss';
 
 const data = {
-  length: 2800,
-  width: 2800,
+  length: 2600,
+  width: 600,
   quantity: 6,
   plate: {
-    type: 'mm25',
-    value: 'h3304',
+    type: 'mm0810',
+    value: 'h1555',
     quantity: 3.12,
     price: 1100,
     sum: 3432,
   },
   kromka2mm: {
-    value: 'reh1348',
-    quantity: 31.2,
+    value: 'reh1615',
+    quantity: 0,
     price: 32,
     sum: 998,
   },
   kromka04mm: {
-    value: 'reh1615',
+    value: 'reh1555',
     quantity: 0,
     price: 0,
     sum: 0,
   },
   straightKromka: {
     top: '2mm',
-    bottom: '04mm',
-    left: '2mm',
+    bottom: '2mm',
+    left: '',
     right: '04mm',
   },
   packing: false,
   totalSum: 4430,
 };
+// const data = {
+//   length: 2600,
+//   width: 200,
+//   quantity: 6,
+//   plate: {
+//     type: 'mdf',
+//     value: 'hg605',
+//     quantity: 3.12,
+//     price: 1100,
+//     sum: 3432,
+//   },
+//   kromka2mm: null,
+//   kromka04mm: null,
+//   straightKromka: {
+//     top: '',
+//     bottom: '',
+//     left: '',
+//     right: '',
+//   },
+//   kromka1mm: {
+//     value: 'no_kromka',
+//     quantity: 0,
+//     price: 0,
+//     sum: 0,
+//   },
+//   packing: false,
+//   totalSum: 4430,
+// };
+
 // spravka redux
 const spravka = {
   decors: {
@@ -219,10 +248,7 @@ export default function App() {
   const render = (
     <>
       <div className={classes.Kanvas}>
-        <RaspilKanvas
-          data={data}
-          spravka={spravka}
-        />
+        <RaspilKanvas data={data} spravka={spravka} />
       </div>
     </>
   );
@@ -232,5 +258,4 @@ export default function App() {
       <div className={classes.App}>{render}</div>
     </StylesProvider>
   );
-  
 }
