@@ -8,6 +8,7 @@ import classes from './RaspilKanvas.module.scss';
 const METRIC_SIZE = 20;
 const DISTANCE = 40;
 const STAGE_SIZE = 336;
+const PADDING = 130;
 
 function Kromka({
   x,
@@ -21,42 +22,89 @@ function Kromka({
 }) {
   const renderComponent = Object.entries(straightKromka).map((el, id) => {
     const [side, thickness] = el;
-  
+
     if (thickness !== '') {
       const positionX = {
         top: 0,
         bottom: 0,
         left: -DISTANCE,
-        right: newLength + DISTANCE
+        right: newLength + DISTANCE,
       };
       const posititonY = {
         top: -DISTANCE,
         bottom: newWidth + DISTANCE,
         left: 0,
-        right: 0
+        right: 0,
       };
       const positionXtext = {
         top: newLength / 2 - 10,
         bottom: newLength / 2 - 10,
         left: -DISTANCE,
-        right: newLength + DISTANCE
+        right: newLength + DISTANCE,
       };
       const posititonYtext = {
         top: -DISTANCE,
         bottom: newWidth + DISTANCE,
         left: newWidth / 2 + 20,
-        right: newWidth/ 2 + 20
+        right: newWidth / 2 + 20,
       };
-      const rotationText= {
+      const rotationText = {
         top: 0,
         bottom: 0,
         left: -90,
-        right: -90
-      }
-      
+        right: -90,
+      };
+
+      const definedSize = {
+        newWidth: {
+          top: {
+            '2mm': 7,
+            '04mm': 3,
+            '1mm': 5,
+          },
+          bottom: {
+            '2mm': 7,
+            '04mm': 3,
+            '1mm': 5,
+          },
+          left: {
+            '2mm': newWidth,
+            '04mm': newWidth,
+            '1mm': newWidth,
+          },
+          right: {
+            '2mm': newWidth,
+            '04mm': newWidth,
+            '1mm': newWidth,
+          },
+        },
+        newLength: {
+          top: {
+            '2mm': newLength,
+            '04mm': newLength,
+            '1mm': newLength,
+          },
+          bottom: {
+            '2mm': newLength,
+            '04mm': newLength,
+            '1mm': newLength,
+          },
+          left: {
+            '2mm': 7,
+            '04mm': 3,
+            '1mm': 5,
+          },
+          right: {
+            '2mm': 7,
+            '04mm': 3,
+            '1mm': 5,
+          },
+        },
+      };
+
       return (
         <Group key={id}>
-          <TextureImage
+          <RenderImage
             path={
               thickness === '2mm'
                 ? srcKromka2mm
@@ -64,8 +112,8 @@ function Kromka({
                 ? srcKromka04mm
                 : srcKromka1mm
             }
-            newWidth={side === 'top' || side === 'bottom' ? 7 : newWidth}
-            newLength={side === 'top' || side === 'bottom' ? newLength : 7}
+            newWidth={definedSize.newWidth[side][thickness]}
+            newLength={definedSize.newLength[side][thickness]}
             x={x + positionX[side]}
             y={y + posititonY[side]}
           />
@@ -140,7 +188,7 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
   );
 }
 
-function TextureImage({ path, newWidth, newLength, x, y }) {
+function RenderImage({ path, newWidth, newLength, x, y }) {
   const myRef = useRef(null);
   const [image, status] = useImage(path);
   useEffect(() => {
@@ -171,6 +219,7 @@ export default function RaspilKanvas({ data, spravka }) {
     width,
     plate: { type: typePlate, value: valuePlate },
   } = data;
+  console.table(data);
 
   function calcProportion(value1, value2) {
     const newMaxValue = Math.max(value1, value2);
@@ -184,14 +233,14 @@ export default function RaspilKanvas({ data, spravka }) {
   const proportion = calcProportion(length, width);
 
   if (length < width) {
-    newWidth = STAGE_SIZE - 130;
+    newWidth = STAGE_SIZE - PADDING;
     newLength = ~~(newWidth / proportion);
   } else if (length > width) {
-    newLength = STAGE_SIZE - 130;
+    newLength = STAGE_SIZE - PADDING;
     newWidth = ~~(newLength / proportion);
   } else {
-    newLength = STAGE_SIZE - 130;
-    newWidth = STAGE_SIZE - 130;
+    newLength = STAGE_SIZE - PADDING;
+    newWidth = STAGE_SIZE - PADDING;
   }
   const x = Math.round((STAGE_SIZE - newLength) / 2);
   const y = Math.round((STAGE_SIZE - newWidth) / 2);
@@ -213,7 +262,7 @@ export default function RaspilKanvas({ data, spravka }) {
     <div className={classes.CanvFigures}>
       <Stage height={STAGE_SIZE} width={STAGE_SIZE}>
         <Layer>
-          <TextureImage
+          <RenderImage
             path={spravka.decors[valuePlate].src}
             newLength={newLength}
             newWidth={newWidth}
