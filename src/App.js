@@ -245,17 +245,11 @@ const spravka = {
   },
 };
 export default function App() {
-  const render = (
-    <>
-      <div className={classes.Kanvas}>
-        <RaspilKanvas data={data} spravka={spravka} />
-      </div>
-    </>
-  );
-
   return (
     <StylesProvider injectFirst>
-      <div className={classes.App}>{render}</div>
+      <div className={classes.App}>
+        <RaspilKanvas data={data} spravka={spravka} />
+      </div>
     </StylesProvider>
   );
 }

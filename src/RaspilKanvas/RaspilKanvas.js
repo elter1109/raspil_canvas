@@ -20,6 +20,7 @@ function Kromka({
   srcKromka2mm,
   srcKromka04mm,
 }) {
+  console.log('%cRenderKromka', 'color: violet');
   const renderComponent = Object.entries(straightKromka).map((el, id) => {
     const [side, thickness] = el;
 
@@ -169,6 +170,7 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
 }
 
 function RenderImage({ path, newWidth, newLength, x, y }) {
+  let render;
   const myRef = useRef(null);
   const [image, status] = useImage(path);
   useEffect(() => {
@@ -176,21 +178,29 @@ function RenderImage({ path, newWidth, newLength, x, y }) {
       myRef.current.cache();
     }
   }, [image]);
-  return (
-    <Image
-      image={image}
-      width={newLength}
-      height={newWidth}
-      x={x}
-      y={y}
-      /* filters={[Konva.Filters.Contrast]} */
-      contrast={18}
-      ref={myRef}
-      shadowBlur={12}
-      shadowOffset={{ x: 10, y: 10 }}
-      shadowOpacity={0.3}
-    />
-  );
+  console.log('%cRenderImage', 'color: green', { status });
+  if (status === 'loaded') {
+    render = (
+      <Image
+        image={image}
+        width={newLength}
+        height={newWidth}
+        x={x}
+        y={y}
+        /* filters={[Konva.Filters.Contrast]} */
+        contrast={18}
+        ref={myRef}
+        shadowBlur={12}
+        shadowOffset={{ x: 10, y: 10 }}
+        shadowOpacity={0.3}
+      />
+    );
+  } else if (status === 'loading') {
+    render = <Text text={'Идет загрузка...'} />;
+  } else {
+    render = <Text text={'Сервер не отвечает'} x={x} y={y} />;
+  }
+  return render;
 }
 
 export default function RaspilKanvas({ data, spravka }) {
@@ -199,7 +209,7 @@ export default function RaspilKanvas({ data, spravka }) {
     width,
     plate: { type: typePlate, value: valuePlate },
   } = data;
-  console.table(data);
+  console.log('%cRaspilKanvas', 'color: red');
 
   function calcProportion(value1, value2) {
     const newMaxValue = Math.max(value1, value2);
@@ -232,54 +242,51 @@ export default function RaspilKanvas({ data, spravka }) {
   const srcKromka04mm =
     !!data.kromka04mm && data.kromka04mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka04mm.value].src
-      : undefined; 
-       
+      : undefined;
+
   const srcKromka1mm =
     data.kromka1mm && data.kromka1mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka1mm.value].src
       : undefined;
-   
 
   return (
-    <div className={classes.CanvFigures}>
-      <Stage height={STAGE_SIZE} width={STAGE_SIZE}>
-        <Layer>
-          <RenderImage
-            path={spravka.decors[valuePlate].src}
-            newLength={newLength}
-            newWidth={newWidth}
+    <Stage height={STAGE_SIZE} width={STAGE_SIZE} className={classes.stage}>
+      <Layer>
+        <RenderImage
+          path={spravka.decors[valuePlate].src}
+          newLength={newLength}
+          newWidth={newWidth}
+          x={x}
+          y={y}
+        />
+        <Metric
+          size={width}
+          newLength={newLength}
+          newWidth={newWidth}
+          x={x}
+          y={y}
+          vertical
+        />
+        <Metric
+          size={length}
+          newLength={newLength}
+          newWidth={newWidth}
+          x={x}
+          y={y}
+        />
+        {typePlate !== 'orgalit' ? (
+          <Kromka
             x={x}
             y={y}
-          />
-          <Metric
-            size={width}
-            newLength={newLength}
+            srcKromka2mm={srcKromka2mm}
+            srcKromka04mm={srcKromka04mm}
+            srcKromka1mm={srcKromka1mm}
             newWidth={newWidth}
-            x={x}
-            y={y}
-            vertical
-          />
-          <Metric
-            size={length}
             newLength={newLength}
-            newWidth={newWidth}
-            x={x}
-            y={y}
+            straightKromka={data.straightKromka ?? undefined}
           />
-          {typePlate !== 'orgalit' ? (
-            <Kromka
-              x={x}
-              y={y}
-              srcKromka2mm={srcKromka2mm}
-              srcKromka04mm={srcKromka04mm}
-              srcKromka1mm={srcKromka1mm}
-              newWidth={newWidth}
-              newLength={newLength}
-              straightKromka={data.straightKromka ?? undefined}
-            />
-          ) : null}
-        </Layer>
-      </Stage>
-    </div>
+        ) : null}
+      </Layer>
+    </Stage>
   );
 }
