@@ -97,6 +97,7 @@ function Kromka({
             newLength={defineSize(newLength, side, thickness, 'newLength')}
             x={x + positionX[side]}
             y={y + posititonY[side]}
+            flag={side}
           />
           <Text
             text={thickness}
@@ -169,16 +170,39 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
   );
 }
 
-function RenderImage({ path, newWidth, newLength, x, y }) {
+function RenderImage({ path, newWidth, newLength, x, y, flag }) {
+  console.log({ newWidth }, { newLength }, { x }, { y }, { flag });
   let render;
   const myRef = useRef(null);
   const [image, status] = useImage(path);
-  console.log({ status });
+
   useEffect(() => {
     if (image) {
       myRef.current.cache();
     }
   }, [image]);
+  const positionTextLoading = {
+    top: {
+      x: x + (newLength / 2 - 40),
+      y: METRIC_SIZE,
+    },
+    bottom: {
+      x: x + (newLength / 2 - 40),
+      y: y + newWidth - 10,
+    },
+    left: {
+      x: METRIC_SIZE,
+      y: newWidth / 2 + 20,
+    },
+    right: {
+      x: METRIC_SIZE,
+      y: newWidth / 2 + 20,
+    },
+    decor: {
+      x: x + newLength / 2,
+      y: y + newWidth / 2,
+    },
+  };
   console.log('%cRenderImage', 'color: green', { status });
   if (status === 'loaded') {
     render = (
@@ -197,9 +221,21 @@ function RenderImage({ path, newWidth, newLength, x, y }) {
       />
     );
   } else if (status === 'loading') {
-    render = <Text text={'Идет загрузка...'} />;
+    render = (
+      <Text
+        text={'Идет загрузка декора...'}
+        x={positionTextLoading[flag].x}
+        y={positionTextLoading[flag].y}
+      />
+    );
   } else {
-    render = <Text text={'Сервер не отвечает'} x={x} y={y} />;
+    render = (
+      <Text
+        text={'Декор не загрузился'}
+        x={positionTextLoading[flag].x}
+        y={positionTextLoading[flag].y}
+      />
+    );
   }
   return render;
 }
@@ -259,6 +295,7 @@ export default function RaspilKanvas({ data, spravka }) {
           newWidth={newWidth}
           x={x}
           y={y}
+          flag={'decor'}
         />
         <Metric
           size={width}
