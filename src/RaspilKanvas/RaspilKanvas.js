@@ -7,7 +7,7 @@ import classes from './RaspilKanvas.module.scss';
 
 const METRIC_SIZE = 20;
 const DISTANCE = 40;
-const STAGE_SIZE = 336;
+const STAGE_SIZE = 330;
 const PADDING = 130;
 
 function Kromka({
@@ -171,6 +171,7 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
 function RenderImage({ path, newWidth, newLength, x, y }) {
   const myRef = useRef(null);
   const [image, status] = useImage(path);
+  console.log({ status });
   useEffect(() => {
     if (image) {
       myRef.current.cache();
@@ -199,7 +200,6 @@ export default function RaspilKanvas({ data, spravka }) {
     width,
     plate: { type: typePlate, value: valuePlate },
   } = data;
-  console.table(data);
 
   function calcProportion(value1, value2) {
     const newMaxValue = Math.max(value1, value2);
@@ -232,54 +232,51 @@ export default function RaspilKanvas({ data, spravka }) {
   const srcKromka04mm =
     !!data.kromka04mm && data.kromka04mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka04mm.value].src
-      : undefined; 
-       
+      : undefined;
+
   const srcKromka1mm =
     data.kromka1mm && data.kromka1mm.value !== 'no_kromka'
       ? spravka.decors[data.kromka1mm.value].src
       : undefined;
-   
 
   return (
-    <div className={classes.CanvFigures}>
-      <Stage height={STAGE_SIZE} width={STAGE_SIZE}>
-        <Layer>
-          <RenderImage
-            path={spravka.decors[valuePlate].src}
-            newLength={newLength}
-            newWidth={newWidth}
+    <Stage height={STAGE_SIZE} width={STAGE_SIZE} className={classes.stage}>
+      <Layer>
+        <RenderImage
+          path={spravka.decors[valuePlate].src}
+          newLength={newLength}
+          newWidth={newWidth}
+          x={x}
+          y={y}
+        />
+        <Metric
+          size={width}
+          newLength={newLength}
+          newWidth={newWidth}
+          x={x}
+          y={y}
+          vertical
+        />
+        <Metric
+          size={length}
+          newLength={newLength}
+          newWidth={newWidth}
+          x={x}
+          y={y}
+        />
+        {typePlate !== 'orgalit' ? (
+          <Kromka
             x={x}
             y={y}
-          />
-          <Metric
-            size={width}
-            newLength={newLength}
+            srcKromka2mm={srcKromka2mm}
+            srcKromka04mm={srcKromka04mm}
+            srcKromka1mm={srcKromka1mm}
             newWidth={newWidth}
-            x={x}
-            y={y}
-            vertical
-          />
-          <Metric
-            size={length}
             newLength={newLength}
-            newWidth={newWidth}
-            x={x}
-            y={y}
+            straightKromka={data.straightKromka ?? undefined}
           />
-          {typePlate !== 'orgalit' ? (
-            <Kromka
-              x={x}
-              y={y}
-              srcKromka2mm={srcKromka2mm}
-              srcKromka04mm={srcKromka04mm}
-              srcKromka1mm={srcKromka1mm}
-              newWidth={newWidth}
-              newLength={newLength}
-              straightKromka={data.straightKromka ?? undefined}
-            />
-          ) : null}
-        </Layer>
-      </Stage>
-    </div>
+        ) : null}
+      </Layer>
+    </Stage>
   );
 }
