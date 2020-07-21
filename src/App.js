@@ -5,8 +5,8 @@ import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 import classes from './App.module.scss';
 
 const data = {
-  length: 2600,
-  width: 600,
+  length: 2800,
+  width: 2800,
   quantity: 6,
   plate: {
     type: 'mm0810',
@@ -30,7 +30,7 @@ const data = {
   straightKromka: {
     top: '2mm',
     bottom: '2mm',
-    left: '',
+    left: '2mm',
     right: '04mm',
   },
   packing: false,

@@ -7,7 +7,7 @@ import classes from './RaspilKanvas.module.scss';
 
 const METRIC_SIZE = 20;
 const DISTANCE = 40;
-const STAGE_SIZE = 336;
+const STAGE_SIZE = 330;
 const PADDING = 130;
 
 function Kromka({
@@ -173,6 +173,7 @@ function RenderImage({ path, newWidth, newLength, x, y }) {
   let render;
   const myRef = useRef(null);
   const [image, status] = useImage(path);
+  console.log({ status });
   useEffect(() => {
     if (image) {
       myRef.current.cache();
