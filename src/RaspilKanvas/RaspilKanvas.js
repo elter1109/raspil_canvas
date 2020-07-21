@@ -29,7 +29,7 @@ function Kromka({
   srcKromka2mm,
   srcKromka04mm,
 }) {
-  // console.log('%cRenderKromka', 'color: violet');
+  console.log('%cRenderKromka', 'color: violet');
   const renderComponent = Object.entries(straightKromka).map((el, id) => {
     const [side, thickness] = el;
 
@@ -181,14 +181,7 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
 
 function RenderImage({ path, newWidth, newLength, x, y, position }) {
   let render;
-  const myRef = useRef(null);
   const [image, status] = useImage(path);
-
-  useEffect(() => {
-    if (image) {
-      myRef.current.cache();
-    }
-  }, [image]);
 
   //render NotLoading
   const newPositionTextLoading =
@@ -211,11 +204,11 @@ function RenderImage({ path, newWidth, newLength, x, y, position }) {
     },
     center: {
       x: x + (newLength / 2 - 50),
-      y: y + newWidth / 2,
+      y: y + (newWidth / 2 - 5),
       rotation: 0,
     },
   };
-  // console.log('%cRenderImage', 'color: green',);
+  console.log('%cRenderImage', 'color: green');
   if (status === 'loaded') {
     render = (
       <Image
@@ -224,9 +217,7 @@ function RenderImage({ path, newWidth, newLength, x, y, position }) {
         height={newWidth}
         x={x}
         y={y}
-        /* filters={[Konva.Filters.Contrast]} */
         contrast={18}
-        ref={myRef}
         shadowBlur={12}
         shadowOffset={{ x: 10, y: 10 }}
         shadowOpacity={0.3}
@@ -241,13 +232,12 @@ function RenderImage({ path, newWidth, newLength, x, y, position }) {
             y={y}
             width={newLength}
             height={newWidth}
-            fill={'#3f51b5'}
-            opacity={0.7}
+            fill={'grey'}
+            opacity={0.5}
           />
         ) : null}
         <Text
-          fontStyle={'bold'}
-          fill={'#dc004e'}
+          fill={'#3f51b5'}
           text={
             status === 'loading'
               ? 'Идет загрузка декора...'
