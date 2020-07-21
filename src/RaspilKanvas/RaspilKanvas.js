@@ -1,6 +1,15 @@
 import React, { useRef, useEffect } from 'react';
 // import Konva from 'konva';
-import { Stage, Layer, Image, Group, Arrow, Line, Text } from 'react-konva';
+import {
+  Stage,
+  Layer,
+  Image,
+  Group,
+  Arrow,
+  Line,
+  Text,
+  Rect,
+} from 'react-konva';
 import useImage from 'use-image';
 
 import classes from './RaspilKanvas.module.scss';
@@ -20,7 +29,7 @@ function Kromka({
   srcKromka2mm,
   srcKromka04mm,
 }) {
-  console.log('%cRenderKromka', 'color: violet');
+  // console.log('%cRenderKromka', 'color: violet');
   const renderComponent = Object.entries(straightKromka).map((el, id) => {
     const [side, thickness] = el;
 
@@ -97,7 +106,7 @@ function Kromka({
             newLength={defineSize(newLength, side, thickness, 'newLength')}
             x={x + positionX[side]}
             y={y + posititonY[side]}
-            flag={side}
+            position={side}
           />
           <Text
             text={thickness}
@@ -170,8 +179,7 @@ function Metric({ size, newLength, newWidth, x, y, vertical }) {
   );
 }
 
-function RenderImage({ path, newWidth, newLength, x, y, flag }) {
-  console.log({ newWidth }, { newLength }, { x }, { y }, { flag });
+function RenderImage({ path, newWidth, newLength, x, y, position }) {
   let render;
   const myRef = useRef(null);
   const [image, status] = useImage(path);
@@ -181,29 +189,33 @@ function RenderImage({ path, newWidth, newLength, x, y, flag }) {
       myRef.current.cache();
     }
   }, [image]);
+
+  //render NotLoading
+  const newPositionTextLoading =
+    position === 'top' || position === 'bottom'
+      ? 'topBottom'
+      : position === 'left' || position === 'right'
+      ? 'leftRight'
+      : 'center';
+
   const positionTextLoading = {
-    top: {
-      x: x + (newLength / 2 - 40),
-      y: METRIC_SIZE,
+    topBottom: {
+      x: x + (newLength / 2 - 50),
+      y: y,
+      rotation: 0,
     },
-    bottom: {
-      x: x + (newLength / 2 - 40),
-      y: y + newWidth - 10,
+    leftRight: {
+      x: x,
+      y: y + (newWidth / 2 + 40),
+      rotation: -90,
     },
-    left: {
-      x: METRIC_SIZE,
-      y: newWidth / 2 + 20,
-    },
-    right: {
-      x: METRIC_SIZE,
-      y: newWidth / 2 + 20,
-    },
-    decor: {
-      x: x + newLength / 2,
+    center: {
+      x: x + (newLength / 2 - 50),
       y: y + newWidth / 2,
+      rotation: 0,
     },
   };
-  console.log('%cRenderImage', 'color: green', { status });
+  // console.log('%cRenderImage', 'color: green',);
   if (status === 'loaded') {
     render = (
       <Image
@@ -220,21 +232,32 @@ function RenderImage({ path, newWidth, newLength, x, y, flag }) {
         shadowOpacity={0.3}
       />
     );
-  } else if (status === 'loading') {
-    render = (
-      <Text
-        text={'Идет загрузка декора...'}
-        x={positionTextLoading[flag].x}
-        y={positionTextLoading[flag].y}
-      />
-    );
   } else {
     render = (
-      <Text
-        text={'Декор не загрузился'}
-        x={positionTextLoading[flag].x}
-        y={positionTextLoading[flag].y}
-      />
+      <>
+        {position === 'center' ? (
+          <Rect
+            x={x}
+            y={y}
+            width={newLength}
+            height={newWidth}
+            fill={'#3f51b5'}
+            opacity={0.7}
+          />
+        ) : null}
+        <Text
+          fontStyle={'bold'}
+          fill={'#dc004e'}
+          text={
+            status === 'loading'
+              ? 'Идет загрузка декора...'
+              : 'Декор не загрузился'
+          }
+          x={positionTextLoading[newPositionTextLoading].x}
+          y={positionTextLoading[newPositionTextLoading].y}
+          rotation={positionTextLoading[newPositionTextLoading].rotation}
+        />
+      </>
     );
   }
   return render;
@@ -295,7 +318,7 @@ export default function RaspilKanvas({ data, spravka }) {
           newWidth={newWidth}
           x={x}
           y={y}
-          flag={'decor'}
+          position={'center'}
         />
         <Metric
           size={width}
