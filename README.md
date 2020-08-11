@@ -1,0 +1,1 @@
+This component works with the library Konva
