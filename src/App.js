@@ -1,6 +1,6 @@
 import React from 'react';
 import { StylesProvider } from '@material-ui/core/styles';
-import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
+import RaspilCanvas from './RaspilСanvas/RaspilСanvas';
 
 import classes from './App.module.scss';
 
@@ -220,7 +220,7 @@ export default function App() {
   return (
     <StylesProvider injectFirst>
       <div className={classes.App}>
-        <RaspilKanvas data={data} spravka={spravka} />
+        <RaspilCanvas data={data} spravka={spravka} />
       </div>
     </StylesProvider>
   );
