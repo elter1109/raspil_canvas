@@ -4,6 +4,7 @@ import RaspilKanvas from './RaspilKanvas/RaspilKanvas';
 
 import classes from './App.module.scss';
 
+//fictitious data
 const data = {
   length: 2800,
   width: 2800,
@@ -36,36 +37,7 @@ const data = {
   packing: false,
   totalSum: 4430,
 };
-// const data = {
-//   length: 2600,
-//   width: 200,
-//   quantity: 6,
-//   plate: {
-//     type: 'mdf',
-//     value: 'hg605',
-//     quantity: 3.12,
-//     price: 1100,
-//     sum: 3432,
-//   },
-//   kromka2mm: null,
-//   kromka04mm: null,
-//   straightKromka: {
-//     top: '',
-//     bottom: '',
-//     left: '',
-//     right: '',
-//   },
-//   kromka1mm: {
-//     value: 'no_kromka',
-//     quantity: 0,
-//     price: 0,
-//     sum: 0,
-//   },
-//   packing: false,
-//   totalSum: 4430,
-// };
-
-// spravka redux
+//fictitious data
 const spravka = {
   decors: {
     h1348: {

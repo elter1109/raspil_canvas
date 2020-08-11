@@ -1,5 +1,4 @@
-import React, { useRef, useEffect } from 'react';
-// import Konva from 'konva';
+import React from 'react';
 import {
   Stage,
   Layer,
@@ -12,7 +11,7 @@ import {
 } from 'react-konva';
 import useImage from 'use-image';
 
-import classes from './RaspilKanvas.module.scss';
+import classes from './RaspilСanvas.module.scss';
 
 const METRIC_SIZE = 20;
 const DISTANCE = 40;
@@ -29,7 +28,6 @@ function Kromka({
   srcKromka2mm,
   srcKromka04mm,
 }) {
-  console.log('%cRenderKromka', 'color: violet');
   const renderComponent = Object.entries(straightKromka).map((el, id) => {
     const [side, thickness] = el;
 
@@ -208,7 +206,7 @@ function RenderImage({ path, newWidth, newLength, x, y, position }) {
       rotation: 0,
     },
   };
-  console.log('%cRenderImage', 'color: green');
+
   if (status === 'loaded') {
     render = (
       <Image
@@ -259,7 +257,6 @@ export default function RaspilKanvas({ data, spravka }) {
     width,
     plate: { type: typePlate, value: valuePlate },
   } = data;
-  console.log('%cRaspilKanvas', 'color: red');
 
   function calcProportion(value1, value2) {
     const newMaxValue = Math.max(value1, value2);
