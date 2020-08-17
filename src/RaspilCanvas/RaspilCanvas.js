@@ -11,7 +11,7 @@ import {
 } from 'react-konva';
 import useImage from 'use-image';
 
-import classes from './RaspilСanvas.module.scss';
+import classes from './RaspilCanvas.module.scss';
 
 const METRIC_SIZE = 20;
 const DISTANCE = 40;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StylesProvider } from '@material-ui/core/styles';
-import RaspilCanvas from './RaspilСanvas/RaspilСanvas';
+import RaspilCanvas from './RaspilCanvas/RaspilCanvas';
 
 import classes from './App.module.scss';
 
