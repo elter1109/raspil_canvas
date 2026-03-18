@@ -5,7 +5,7 @@
 * Отдельной demo-версии компонента нет, работает только в приложении.
 
 
-## RaspilKanvas
+## RaspilСanvas
 
 - dumb components
 - получает данные через props
